@@ -9,19 +9,19 @@ When ElasticSearch is used in back of load balancer, connections are losen when 
 
 This plugin avoid that.
 
-First, the load balancer must check the connectivity by sending a message to Elasticsearch.
-    `curl http://servername:9200/ESProbe/_probe`
+First, the load balancer must check the connectivity by sending a message to Elasticsearch.  
+`curl http://servername:9200/ESProbe/_probe`
 
-In non stopping step, ES replies
-    `{"ok":true,"Node is running"}`
-In stopping mode:
-    `{"ok":false,"Node is stopping"}`
+In non stopping step, ES replies  
+`{"ok":true,"Node is running"}`
+In stopping mode:  
+`{"ok":false,"Node is stopping"}`
     
-When you want to stop the cluster you have to send
-    `curl -XPOST http://servername:9200/ESProbe/_stop`
+When you want to stop the cluster you have to send  
+`curl -XPOST http://servername:9200/ESProbe/_stop`
 
-I you want to reset your restart, you have to send
-    `curl -XPOST http://servername:9200/ESProbe/_reset`
+I you want to reset your restart, you have to send  
+`curl -XPOST http://servername:9200/ESProbe/_reset`
     
 Compilation
 -----------
