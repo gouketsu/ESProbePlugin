@@ -1,12 +1,17 @@
 package org.elasticsearch.plugin.probe.action;
 
+import static org.elasticsearch.rest.RestStatus.BAD_REQUEST;
+
 import java.io.IOException;
 
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.logging.ESLogger;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.rest.BytesRestResponse;
 import org.elasticsearch.rest.RestChannel;
 import org.elasticsearch.rest.RestRequest;
-import org.elasticsearch.rest.XContentThrowableRestResponse;
+import org.elasticsearch.plugin.probe.action.suppport.RestXContentBuilder;
+
 
 public class Action {
 	public static final String PROBE = "_probe";
@@ -36,7 +41,13 @@ public class Action {
                                      IOException e)
     {
             try {
-                    channel.sendResponse(new XContentThrowableRestResponse(request, e));
+            	XContentBuilder builder = RestXContentBuilder
+                        .restContentBuilder(
+                                request);
+                channel.sendResponse(new BytesRestResponse(
+                        BAD_REQUEST, builder.startObject().field("error",
+                        e.getMessage()).endObject()));
+
             } catch (IOException e1) {
                     logger.error("Failed to send failure response", e1);
             }

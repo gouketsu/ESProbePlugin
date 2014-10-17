@@ -12,6 +12,7 @@ import org.elasticsearch.rest.RestRequest.Method;
 
 
 public class ProbeRestHandler extends BaseRestHandler {
+	
 	@Inject
     public ProbeRestHandler(Settings settings, Client client, RestController restController) {
 		super(settings, client);
@@ -19,8 +20,8 @@ public class ProbeRestHandler extends BaseRestHandler {
         restController.registerHandler(Method.POST, "/ESProbe/{command}", this);
     }
 	
-	@Override
-    public void handleRequest(final RestRequest request, final RestChannel channel) {
+
+    public void handleRequest(final RestRequest request, final RestChannel channel, final Client client) {
 		 String command = request.param("command");
 		 Method method  = request.method();
 		 ActionFactory.getAction(client,method, command).doAndRespond(logger, request, channel);

@@ -1,5 +1,7 @@
 package org.elasticsearch.plugin.probe.action;
 
+import static org.elasticsearch.rest.RestStatus.OK;
+
 import java.io.IOException;
 
 import org.elasticsearch.client.Client;
@@ -7,12 +9,14 @@ import org.elasticsearch.common.logging.ESLogger;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentBuilderString;
 import org.elasticsearch.plugin.probe.ESProbePlugin;
+import org.elasticsearch.rest.BytesRestResponse;
 import org.elasticsearch.rest.RestChannel;
 import org.elasticsearch.rest.RestRequest;
 import org.elasticsearch.rest.RestRequest.Method;
 import org.elasticsearch.rest.RestStatus;
-import org.elasticsearch.rest.XContentRestResponse;
-import org.elasticsearch.rest.action.support.RestXContentBuilder;
+import org.elasticsearch.plugin.probe.action.suppport.RestXContentBuilder;
+
+
 
 public class ResetAction extends Action implements Iaction {
 
@@ -32,7 +36,8 @@ public class ResetAction extends Action implements Iaction {
 			builder.field(new XContentBuilderString("ok"), true);
 			builder.field("Node is reset to running" )
                  .endObject();
-			channel.sendResponse(new XContentRestResponse(request, RestStatus.OK, builder));
+			channel.sendResponse(new BytesRestResponse(
+                    OK, builder));
 	
 		}
 		catch (IOException e) {

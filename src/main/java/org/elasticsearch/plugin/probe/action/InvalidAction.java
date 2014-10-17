@@ -1,17 +1,20 @@
 package org.elasticsearch.plugin.probe.action;
 
+import static org.elasticsearch.rest.RestStatus.OK;
+
 import java.io.IOException;
 
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.logging.ESLogger;
+import org.elasticsearch.common.bytes.BytesReference;
+import org.elasticsearch.rest.BytesRestResponse;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentBuilderString;
 import org.elasticsearch.rest.RestChannel;
 import org.elasticsearch.rest.RestRequest;
 import org.elasticsearch.rest.RestRequest.Method;
 import org.elasticsearch.rest.RestStatus;
-import org.elasticsearch.rest.XContentRestResponse;
-import org.elasticsearch.rest.action.support.RestXContentBuilder;
+import org.elasticsearch.plugin.probe.action.suppport.RestXContentBuilder;
 
 public class InvalidAction extends Action implements Iaction {
         private String section ;
@@ -34,7 +37,9 @@ public class InvalidAction extends Action implements Iaction {
                         builder.field(new XContentBuilderString("ok"), false);
                         builder.field("invalid_command",method.toString()+"/"+command )
                                                      .endObject();
-                        channel.sendResponse(new XContentRestResponse(request, RestStatus.OK, builder));
+                        channel.sendResponse(new BytesRestResponse(
+                                OK, builder));
+
                 } catch (IOException e) {
                         onFailure(channel, request, logger, e);
                 }
